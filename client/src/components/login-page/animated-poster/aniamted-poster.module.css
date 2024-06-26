@@ -1,0 +1,19 @@
+.posterImg {
+  max-width: 450px;
+  max-height: 450px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  transition: 1000ms;
+}
+
+.posterImg:hover {
+  rotate: 360deg;
+  scale: 110%;
+}
+
+@media only screen and (max-width: 844px) {
+  .posterImg {
+    display: none;
+  }
+}
