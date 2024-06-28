@@ -25,9 +25,7 @@ export default function RootLayout({
         <GlobalTheme>
           {auth && <LeftNavigation />}
           <main className="flex flex-col w-full min-h-screen p-20">
-            <section className="flex flex-1 overflow-y-auto">
-              {children}
-            </section>
+            <section className="flex-1 overflow-y-auto">{children}</section>
             <Footer />
           </main>
         </GlobalTheme>

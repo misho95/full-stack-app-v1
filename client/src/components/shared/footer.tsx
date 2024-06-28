@@ -1,8 +1,9 @@
 import Link from "next/link";
+import ThemeSwitch from "./theme-switch";
 
 const Footer = () => {
   return (
-    <footer className="flex flex-col gap-3 justify-center items-center text-sm">
+    <footer className="flex flex-col gap-3 justify-center items-center text-xs text-secondary">
       <nav className="flex gap-3 ">
         <Link href="/">Meta</Link>
         <Link href="/">About</Link>
@@ -18,12 +19,13 @@ const Footer = () => {
         <Link href="/">Contact Uploading & Non-Users</Link>
         <Link href="/">Meta Verified</Link>
       </nav>
-      <section className="flex gap-3">
+      <div className="flex gap-3">
         <select>
           <option>English</option>
         </select>
         <p>© 2024 Instagram from Meta</p>
-      </section>
+        <ThemeSwitch />
+      </div>
     </footer>
   );
 };
