@@ -1,7 +1,5 @@
-"use client";
-
 import { ReactNode, useEffect, useLayoutEffect } from "react";
-import { useThemeContext } from "./global-context";
+import { useThemeContext } from "../../utils/global-context";
 
 const GlobalTheme = ({ children }: { children: ReactNode }) => {
   const { theme, setTheme } = useThemeContext();

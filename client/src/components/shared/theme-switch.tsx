@@ -1,6 +1,4 @@
-"use client";
-
-import { useThemeContext } from "@/utils/global-context";
+import { useThemeContext } from "../../utils/global-context";
 
 const ThemeSwitch = () => {
   const { theme, toggleTheme } = useThemeContext();
