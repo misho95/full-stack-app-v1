@@ -10,11 +10,11 @@ const FormContainer = ({
   return (
     <div className="w-[350px] p-5 border-[1px] border-slate300">
       {title && (
-        <h3 className="text-2xl font-bold uppercase mb-10 text-center mt-[30px]">
+        <h3 className="text-2xl font-bold uppercase mb-[20px] text-center mt-[20px]">
           Social-Media-App
         </h3>
       )}
-      <div className="w-full flex flex-col items-center">{children}</div>
+      <div className="w-full flex flex-col gap-2 items-center">{children}</div>
     </div>
   );
 };

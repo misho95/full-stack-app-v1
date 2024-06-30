@@ -2,6 +2,9 @@ import { useState } from "react";
 import AuthInput from "./auth-input";
 import FormContainer from "./form-container";
 import { Link } from "react-router-dom";
+import AuthSeparator from "./auth-separator";
+import AuthButton from "./auth-button";
+import { IoLogoFacebook } from "react-icons/io";
 
 const SignInForm = () => {
   const [credentials, setCredentials] = useState("");
@@ -23,23 +26,17 @@ const SignInForm = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button className="bg-blue-500 text-white p-1 rounded-sm">
-            Log in
-          </button>
+          <AuthButton title={"Log in"} />
         </form>
-        <div className="flex justify-center items-center w-full text-slate700 my-5 select-none">
-          <div className="w-full h-[1px] bg-slate-400" />
-          <div className="px-3">OR</div>
-          <div className="w-full h-[1px] bg-slate-400" />
-        </div>
-        <button>Log in with Facebook</button>
+        <AuthSeparator />
+        <AuthButton title={"Log in with Facebook"} Icon={IoLogoFacebook} />
         <Link to="/" className="text-xs">
           Forgot password?
         </Link>
       </FormContainer>
       <FormContainer>
         <p>
-          Don't have an account? <Link to={"/"}>Sign up</Link>
+          Don't have an account? <Link to={"/auth/signup"}>Sign up</Link>
         </p>
       </FormContainer>
     </div>

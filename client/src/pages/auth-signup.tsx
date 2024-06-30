@@ -1,9 +1,9 @@
-import SignInUp from "../components/auth/sign-up";
+import SignUpForm from "../components/auth/signup-form";
 
 const AuthSignUpPage = () => {
   return (
     <div className="flex justify-center items-center gap-5 ">
-      <SignInUp />
+      <SignUpForm />
     </div>
   );
 };

@@ -6,7 +6,7 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 
 const AuthInput = ({ placeholder, ...props }: InputProps) => {
   return (
-    <div className="w-full flex flex-col justify-center relative border-[1px] border-slate300 bg-slate100 p-1 h-[40px]">
+    <div className="w-full flex flex-col justify-center relative border-[1px] border-slate300 bg-slate100 p-1 h-[40px] text-left">
       <label
         htmlFor={placeholder}
         className={clsx(
