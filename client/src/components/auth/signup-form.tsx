@@ -45,7 +45,10 @@ const SignUpForm = () => {
           />
           <p>
             People who use our service may have uploaded your contact
-            information to Instagram. <Link to={"/"}>Learn More</Link>
+            information to Instagram.{" "}
+            <Link to={"/"} className="text-blue-500 font-semibold">
+              Learn More
+            </Link>
           </p>
           <p>
             By signing up, you agree to our Terms , Privacy Policy and Cookies
@@ -56,7 +59,10 @@ const SignUpForm = () => {
       </FormContainer>
       <FormContainer>
         <p>
-          Have an account? <Link to={"/auth/signin"}>Log in</Link>
+          Have an account?{" "}
+          <Link to={"/auth/signin"} className="text-blue-500 font-semibold">
+            Log in
+          </Link>
         </p>
       </FormContainer>
     </div>

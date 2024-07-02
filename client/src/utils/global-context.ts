@@ -9,7 +9,7 @@ type useThemeContextType = {
 
 export const useThemeContext = create<useThemeContextType>((set) => ({
   theme: "light",
-  setTheme: (prop) => ({ theme: prop }),
+  setTheme: (prop) => set(() => ({ theme: prop })),
   toggleTheme: () =>
     set((state) => ({ theme: state.theme === "light" ? "dark" : "light" })),
 }));
@@ -20,8 +20,18 @@ type useSessionUserType = {
   clearUser: () => void;
 };
 
-export const useSessionUser = create<useSessionUserType>(() => ({
+export const useSessionUser = create<useSessionUserType>((set) => ({
   user: null,
-  setUser: (prop) => ({ user: prop }),
-  clearUser: () => ({ user: null }),
+  setUser: (prop) => set(() => ({ user: prop })),
+  clearUser: () => set(() => ({ user: null })),
+}));
+
+type useTokenType = {
+  token: null | string;
+  setToken: (prop: string | null) => void;
+};
+
+export const useToken = create<useTokenType>((set) => ({
+  token: null,
+  setToken: (prop) => set(() => ({ token: prop })),
 }));
