@@ -1,41 +1,41 @@
 import { useEffect } from "react";
-import { useToken } from "./global-context";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useSessionUser } from "./global-context";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { AxiosInstance } from "./axios";
 
 const ProtecedRoute = () => {
+  const { user, setUser } = useSessionUser();
+  const location = useLocation();
   const navigate = useNavigate();
 
-  const { token } = useToken();
-
-  const checkToken = async () => {
-    if (!token) {
-      const res = await AxiosInstance.post("/auth/refresh_token");
-      if (res.data.message === "Unauthorized") {
-        navigate("/auth/signin", { replace: true });
-      } else {
-        console.log("client:", res);
-      }
-    } else {
-      AxiosInstance.interceptors.request.use(
-        (config) => {
-          config.headers["Authorization"] = token;
-          return config;
-        },
-        (error) => {
-          return Promise.reject(error);
-        }
-      );
-
-      navigate("/", { replace: true });
+  const handleUserFetch = async () => {
+    const tkn = localStorage.getItem("_at");
+    if (!tkn) {
+      navigate("/auth/signin", { replace: true });
+      return;
     }
+
+    const res = await AxiosInstance.get("/auth/profile/", {
+      headers: {
+        Authorization: `Bearer ${tkn}`,
+      },
+    });
+
+    console.log(res);
+
+    if (!res.data.user) {
+      navigate("/auth/signin", { replace: true });
+      return;
+    }
+
+    setUser(res.data.user);
   };
 
   useEffect(() => {
-    checkToken();
-  }, [token]);
+    handleUserFetch();
+  }, []);
 
-  if (!token) {
+  if (!user && !location.pathname.includes("auth")) {
     return null;
   }
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import AuthInput from "./auth-input";
 import FormContainer from "./form-container";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,14 +6,16 @@ import AuthSeparator from "./auth-separator";
 import AuthButton from "./auth-button";
 import { IoLogoFacebook } from "react-icons/io";
 import axios from "axios";
-import { useToken } from "../../utils/global-context";
+import { AxiosInstance } from "../../utils/axios";
+import { AuthProivder } from "../../app";
 
 const SignInForm = () => {
-  const { setToken } = useToken();
-  const navigate = useNavigate();
-
   const [credentials, setCredentials] = useState("");
   const [password, setPassword] = useState("");
+
+  const { setUser, setLoading } = useContext(AuthProivder);
+
+  const navigate = useNavigate();
 
   const submitSigninForm = async (e: any) => {
     e.preventDefault();
@@ -24,9 +26,17 @@ const SignInForm = () => {
 
     const { access_token } = res.data;
 
-    setToken(access_token);
+    localStorage.setItem("_at", access_token);
 
-    navigate("/");
+    const response = await AxiosInstance.get("/auth/profile", {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
+
+    setUser(response.data.user);
+    setLoading(true);
+    navigate(0);
   };
 
   return (

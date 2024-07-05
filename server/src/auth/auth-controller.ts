@@ -48,7 +48,6 @@ export class AuthController {
     if (!refresh) {
       return new UnauthorizedException();
     }
-    return { message: 'success' };
     return this.authService.refreshToken(refresh);
   }
 

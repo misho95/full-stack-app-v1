@@ -25,13 +25,3 @@ export const useSessionUser = create<useSessionUserType>((set) => ({
   setUser: (prop) => set(() => ({ user: prop })),
   clearUser: () => set(() => ({ user: null })),
 }));
-
-type useTokenType = {
-  token: null | string;
-  setToken: (prop: string | null) => void;
-};
-
-export const useToken = create<useTokenType>((set) => ({
-  token: null,
-  setToken: (prop) => set(() => ({ token: prop })),
-}));

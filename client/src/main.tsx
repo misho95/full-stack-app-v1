@@ -8,16 +8,17 @@ import ErrorPage from "./pages/error-page";
 import AuthSignInPage from "./pages/auth-signin";
 import ProtecedRoute from "./utils/protected-route";
 import AuthSignUpPage from "./pages/auth-signup";
+import App from "./app";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout navBar />,
+    element: <ProtecedRoute />,
     errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
-        element: <ProtecedRoute />,
+        element: <Layout navBar />,
         children: [
           {
             path: "/",
@@ -25,20 +26,20 @@ const router = createBrowserRouter([
           },
         ],
       },
-    ],
-  },
-  {
-    path: "/auth",
-    element: <Layout />,
-    errorElement: <ErrorPage />,
-    children: [
       {
-        path: "/auth/signin",
-        element: <AuthSignInPage />,
-      },
-      {
-        path: "/auth/signup",
-        element: <AuthSignUpPage />,
+        path: "/auth",
+        element: <Layout />,
+        errorElement: <ErrorPage />,
+        children: [
+          {
+            path: "/auth/signin",
+            element: <AuthSignInPage />,
+          },
+          {
+            path: "/auth/signup",
+            element: <AuthSignUpPage />,
+          },
+        ],
       },
     ],
   },
@@ -46,6 +47,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    {/* <RouterProvider router={router} /> */}
+    <App />
   </React.StrictMode>
 );
