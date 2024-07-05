@@ -13,15 +13,19 @@ import Loading from "./components/shared/loading";
 export const AuthProivder = createContext<any>(null);
 
 const App = () => {
-  console.log("testing...");
-
   const [user, setUser] = useState(null);
   const [isLoading, setLoading] = useState(true);
+
+  const cancelLoading = () => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+  };
 
   const handleUserApi = async () => {
     const tkn = localStorage.getItem("_at");
     if (!tkn) {
-      setLoading(false);
+      cancelLoading();
       return;
     }
     const response = await AxiosInstance.get("/auth/profile", {
@@ -31,12 +35,12 @@ const App = () => {
     });
 
     if (response.status === 403) {
-      setLoading(false);
+      cancelLoading();
       return;
     }
 
     setUser(response.data.user);
-    setLoading(false);
+    cancelLoading();
   };
 
   useEffect(() => {
