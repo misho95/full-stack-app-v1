@@ -16,12 +16,13 @@ AxiosInstance.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.response.config;
+    const tkn = localStorage.getItem("_at");
 
-    if (error.response.status === 401) {
+    if (error.response.status === 401 && tkn) {
       const waitToken = await AxiosInstance.post("/auth/refresh_token");
       const { access_token } = waitToken.data;
 
-      if (!originalRequest._retry) {
+      if (!originalRequest._retry && access_token) {
         originalRequest._retry = true;
 
         // Modify the original request (e.g., refreshing the token)

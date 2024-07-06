@@ -6,10 +6,12 @@ import {
   Get,
   Res,
   UnauthorizedException,
+  Body,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { createUserDto } from './auth-validator';
 
 interface CustomResponse extends Response {
   cookie(name: string, value: any, options?: any): this;
@@ -40,6 +42,11 @@ export class AuthController {
     res.cookie('refresh_token', refresh_token, cookieOptions);
 
     return { access_token };
+  }
+
+  @Post('signup')
+  async registerUser(@Body() body: createUserDto) {
+    this.authService.signup(body);
   }
 
   @Post('refresh_token')

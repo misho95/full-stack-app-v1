@@ -7,10 +7,18 @@ import AuthButton from "./auth-button";
 import { IoLogoFacebook } from "react-icons/io";
 import { AxiosInstance } from "../../utils/axios";
 import { AuthProivder } from "../../app";
+import { useForm } from "react-hook-form";
 
 const SignInForm = () => {
   const [credentials, setCredentials] = useState("");
   const [password, setPassword] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
 
   const { setLoading } = useContext(AuthProivder);
 
@@ -18,20 +26,20 @@ const SignInForm = () => {
 
   const submitSigninForm = async (e: any) => {
     e.preventDefault();
-    const res = await AxiosInstance.post(
-      "http://localhost:8080/api/auth/signin",
-      {
-        username: "john",
-        password: "changeme",
-      }
-    );
+    await AxiosInstance.post("http://localhost:8080/api/auth/signin", {
+      username: credentials,
+      password: password,
+    })
+      .then((res) => {
+        const { access_token } = res.data;
+        localStorage.setItem("_at", access_token);
 
-    const { access_token } = res.data;
-
-    localStorage.setItem("_at", access_token);
-
-    setLoading(true);
-    navigate(0);
+        setLoading(true);
+        navigate(0);
+      })
+      .catch((err) => {
+        navigate(0);
+      });
   };
 
   return (
