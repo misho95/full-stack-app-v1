@@ -8,17 +8,24 @@ import { IoLogoFacebook } from "react-icons/io";
 import { AxiosInstance } from "../../utils/axios";
 import { AuthProivder } from "../../app";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const schema = yup
+  .object({
+    credentials: yup.string().required(),
+    password: yup.string().required(),
+  })
+  .required();
+type FormData = yup.InferType<typeof schema>;
 
 const SignInForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      credentials: "",
-      password: "",
-    },
+  } = useForm<FormData>({
+    resolver: yupResolver(schema),
   });
 
   const { setLoading } = useContext(AuthProivder);

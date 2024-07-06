@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from 'src/models/user.schema';
@@ -20,6 +20,17 @@ export class UsersService {
     password: string,
     fullname: string,
   ) {
+    const emailExist = await this.userModel.findOne({ email });
+    const usernameExist = await this.userModel.findOne({ username });
+
+    if (emailExist && usernameExist) {
+      return { message: 'email and username both exist', status: 400 };
+    } else if (emailExist) {
+      return { message: 'email already exist', status: 400 };
+    } else if (usernameExist) {
+      return { message: 'username already exist', status: 400 };
+    }
+
     const user = new this.userModel();
     user.fullname = fullname;
     user.username = username;
@@ -28,5 +39,7 @@ export class UsersService {
     user.password = hash;
 
     await user.save();
+
+    return { message: 'success', status: 201 };
   }
 }

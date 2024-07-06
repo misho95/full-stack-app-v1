@@ -1,56 +1,47 @@
 import clsx from "clsx";
-import { FieldError } from "react-hook-form";
+import { FieldError, RegisterOptions } from "react-hook-form";
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
-  placeholder: string;
   label: string;
   register: any;
   required: boolean;
   error: FieldError | undefined;
+  options?: RegisterOptions;
 };
 
 const AuthInput = ({
-  placeholder,
   label,
   register,
   required,
   error,
+  options,
   ...props
 }: InputProps) => {
   return (
-    <div
-      className={clsx(
-        "w-full flex flex-col justify-center relative border-[1px]  bg-slate100 p-1 h-[40px] text-left",
-        {
-          "border-slate300": !error,
-          "border-red-500": error,
-        }
-      )}
-    >
-      <label
-        htmlFor={placeholder}
+    <>
+      <div
         className={clsx(
-          "absolute duration-200 left-0 pl-2 w-full hover:cursor-text select-none",
+          "w-full flex flex-col justify-center relative border-[1px]  bg-slate100 p-1 h-[40px] text-left",
           {
-            "top-1/2 -translate-y-1/2 text-slate500": props.value === "",
-            "top-[1px] text-xs text-slate400": props.value !== "",
+            "border-slate300": !error,
+            "border-red-500": error,
           }
         )}
       >
-        {placeholder}
-      </label>
-      <input
-        id={placeholder}
-        {...register(label, { required })}
-        {...props}
-        className={clsx(
-          "bg-transparent focus:outline-none text-xs text-slate950 p-1",
-          {
-            "mt-[12px]": props.value !== "",
+        <input
+          {...register(label, { required }, options)}
+          {...props}
+          className={
+            "bg-transparent focus:outline-none text-xs text-slate950 p-1"
           }
-        )}
-      />
-    </div>
+        />
+      </div>
+      {error && (
+        <div className="w-full text-xs text-red-500 text-left">
+          {error.message}
+        </div>
+      )}
+    </>
   );
 };
 

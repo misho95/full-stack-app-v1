@@ -34,7 +34,7 @@ export class AuthService {
 
   async signup(body: createUserDto) {
     const { username, email, password, fullname } = body;
-    this.usersService.createUser(username, email, password, fullname);
+    return this.usersService.createUser(username, email, password, fullname);
   }
 
   async refreshToken(refresh: string) {

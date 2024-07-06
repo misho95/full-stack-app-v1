@@ -15,21 +15,23 @@ AxiosInstance.interceptors.response.use(
     return config;
   },
   async (error) => {
-    const originalRequest = error.response.config;
-    const tkn = localStorage.getItem("_at");
+    if (error.response && error.response.status === 401) {
+      const originalRequest = error.response.config;
+      const tkn = localStorage.getItem("_at");
 
-    if (error.response.status === 401 && tkn) {
-      const waitToken = await AxiosInstance.post("/auth/refresh_token");
-      const { access_token } = waitToken.data;
+      if (tkn) {
+        const waitToken = await AxiosInstance.post("/auth/refresh_token");
+        const { access_token } = waitToken.data;
 
-      if (!originalRequest._retry && access_token) {
-        originalRequest._retry = true;
+        if (!originalRequest._retry && access_token) {
+          originalRequest._retry = true;
 
-        // Modify the original request (e.g., refreshing the token)
-        originalRequest.headers["Authorization"] = `Bearer ${access_token}`;
-        localStorage.setItem("_at", access_token);
-        // Return the modified request
-        return AxiosInstance(originalRequest);
+          // Modify the original request (e.g., refreshing the token)
+          originalRequest.headers["Authorization"] = `Bearer ${access_token}`;
+          localStorage.setItem("_at", access_token);
+          // Return the modified request
+          return AxiosInstance(originalRequest);
+        }
       }
     }
     return Promise.reject(error);

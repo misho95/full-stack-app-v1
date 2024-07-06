@@ -46,7 +46,7 @@ export class AuthController {
 
   @Post('signup')
   async registerUser(@Body() body: createUserDto) {
-    this.authService.signup(body);
+    return this.authService.signup(body);
   }
 
   @Post('refresh_token')
