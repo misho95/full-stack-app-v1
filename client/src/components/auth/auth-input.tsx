@@ -1,12 +1,32 @@
 import clsx from "clsx";
+import { FieldError } from "react-hook-form";
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   placeholder: string;
+  label: string;
+  register: any;
+  required: boolean;
+  error: FieldError | undefined;
 };
 
-const AuthInput = ({ placeholder, ...props }: InputProps) => {
+const AuthInput = ({
+  placeholder,
+  label,
+  register,
+  required,
+  error,
+  ...props
+}: InputProps) => {
   return (
-    <div className="w-full flex flex-col justify-center relative border-[1px] border-slate300 bg-slate100 p-1 h-[40px] text-left">
+    <div
+      className={clsx(
+        "w-full flex flex-col justify-center relative border-[1px]  bg-slate100 p-1 h-[40px] text-left",
+        {
+          "border-slate300": !error,
+          "border-red-500": error,
+        }
+      )}
+    >
       <label
         htmlFor={placeholder}
         className={clsx(
@@ -21,6 +41,7 @@ const AuthInput = ({ placeholder, ...props }: InputProps) => {
       </label>
       <input
         id={placeholder}
+        {...register(label, { required })}
         {...props}
         className={clsx(
           "bg-transparent focus:outline-none text-xs text-slate950 p-1",

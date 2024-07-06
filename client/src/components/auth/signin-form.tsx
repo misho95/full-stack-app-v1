@@ -10,25 +10,30 @@ import { AuthProivder } from "../../app";
 import { useForm } from "react-hook-form";
 
 const SignInForm = () => {
-  const [credentials, setCredentials] = useState("");
-  const [password, setPassword] = useState("");
-
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      credentials: "",
+      password: "",
+    },
+  });
 
   const { setLoading } = useContext(AuthProivder);
 
   const navigate = useNavigate();
 
-  const submitSigninForm = async (e: any) => {
-    e.preventDefault();
+  const [userError, setUserError] = useState<null | string>(null);
+
+  const submitSigninForm = async (data: {
+    credentials: string;
+    password: string;
+  }) => {
     await AxiosInstance.post("http://localhost:8080/api/auth/signin", {
-      username: credentials,
-      password: password,
+      username: data.credentials,
+      password: data.password,
     })
       .then((res) => {
         const { access_token } = res.data;
@@ -38,7 +43,14 @@ const SignInForm = () => {
         navigate(0);
       })
       .catch((err) => {
-        navigate(0);
+        switch (err.response.status) {
+          case 401:
+            setUserError("Wrong credentials");
+            break;
+          default:
+            setUserError(null);
+            break;
+        }
       });
   };
 
@@ -46,22 +58,29 @@ const SignInForm = () => {
     <div className="flex flex-col gap-3">
       <FormContainer title>
         <form
-          onSubmit={submitSigninForm}
+          onSubmit={handleSubmit(submitSigninForm)}
           className="flex flex-col gap-2 w-full p-3"
         >
           <AuthInput
             type="text"
             placeholder="Username or email"
-            value={credentials}
-            onChange={(e) => setCredentials(e.target.value)}
+            label="credentials"
+            register={register}
+            required
+            error={errors.credentials}
           />
           <AuthInput
             type="password"
             placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            label="password"
+            register={register}
+            required
+            error={errors.password}
           />
           <AuthButton title={"Log in"} />
+          {userError && (
+            <div className="text-red-500 text-sm mt-5">{userError}</div>
+          )}
         </form>
         <AuthSeparator />
         <AuthButton title={"Log in with Facebook"} Icon={IoLogoFacebook} />
