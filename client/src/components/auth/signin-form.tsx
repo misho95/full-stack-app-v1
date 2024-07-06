@@ -5,7 +5,6 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthSeparator from "./auth-separator";
 import AuthButton from "./auth-button";
 import { IoLogoFacebook } from "react-icons/io";
-import axios from "axios";
 import { AxiosInstance } from "../../utils/axios";
 import { AuthProivder } from "../../app";
 
@@ -13,28 +12,24 @@ const SignInForm = () => {
   const [credentials, setCredentials] = useState("");
   const [password, setPassword] = useState("");
 
-  const { setUser, setLoading } = useContext(AuthProivder);
+  const { setLoading } = useContext(AuthProivder);
 
   const navigate = useNavigate();
 
   const submitSigninForm = async (e: any) => {
     e.preventDefault();
-    const res = await axios.post("http://localhost:8080/api/auth/signin", {
-      username: "john",
-      password: "changeme",
-    });
+    const res = await AxiosInstance.post(
+      "http://localhost:8080/api/auth/signin",
+      {
+        username: "john",
+        password: "changeme",
+      }
+    );
 
     const { access_token } = res.data;
 
     localStorage.setItem("_at", access_token);
 
-    const response = await AxiosInstance.get("/auth/profile", {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    });
-
-    setUser(response.data.user);
     setLoading(true);
     navigate(0);
   };

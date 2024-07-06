@@ -19,7 +19,7 @@ const App = () => {
   const cancelLoading = () => {
     setTimeout(() => {
       setLoading(false);
-    }, 1500);
+    }, 50);
   };
 
   const handleUserApi = async () => {

@@ -10,11 +10,18 @@ import {
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';
-import { CustomAuthGuard } from './custom-guard';
 
 interface CustomResponse extends Response {
   cookie(name: string, value: any, options?: any): this;
 }
+
+const cookieOptions = {
+  httpOnly: true,
+  maxAge: 60 * 60 * 24 * 7,
+  secure: false,
+  sameSite: 'Lax',
+  path: '/',
+};
 
 @Controller('/api/auth/')
 export class AuthController {
@@ -30,25 +37,39 @@ export class AuthController {
       req.user,
     );
 
-    res.cookie('refresh_token', refresh_token, {
-      httpOnly: true,
-      maxAge: 60 * 60 * 24 * 7,
-      secure: false,
-      sameSite: 'Lax',
-      path: '/',
-    });
+    res.cookie('refresh_token', refresh_token, cookieOptions);
 
     return { access_token };
   }
 
-  @UseGuards(CustomAuthGuard)
   @Post('refresh_token')
-  refreshToken(@Request() req: any) {
+  async refreshToken(
+    @Request() req: any,
+    @Res({ passthrough: true }) res: CustomResponse,
+  ) {
     const refresh = req.cookies['refresh_token'];
     if (!refresh) {
       return new UnauthorizedException();
     }
-    return this.authService.refreshToken(refresh);
+
+    const { access_token, refresh_token } =
+      await this.authService.refreshToken(refresh);
+
+    res.cookie('refresh_token', refresh_token, cookieOptions);
+
+    return { access_token };
+  }
+
+  @Post('signout')
+  signOutUser(
+    @Request() req: any,
+    @Res({ passthrough: true }) res: CustomResponse,
+  ) {
+    const refresh = req.cookies['refresh_token'];
+    if (!refresh) {
+      return new UnauthorizedException();
+    }
+    res.cookie('refresh_token', null, cookieOptions);
   }
 
   @UseGuards(JwtAuthGuard)
