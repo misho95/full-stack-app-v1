@@ -9,6 +9,7 @@ import AuthSignInPage from "./pages/auth-signin";
 import AuthSignUpPage from "./pages/auth-signup";
 import { AxiosInstance } from "./utils/axios";
 import Loading from "./components/shared/loading";
+import { isExpired } from "react-jwt";
 
 export const AuthProivder = createContext<any>(null);
 
@@ -28,6 +29,14 @@ const App = () => {
       cancelLoading();
       return;
     }
+
+    const isMyTokenExpired = isExpired(tkn);
+
+    if (isMyTokenExpired) {
+      cancelLoading();
+      return;
+    }
+
     const response = await AxiosInstance.get("/auth/profile", {
       headers: {
         Authorization: `Bearer ${tkn}`,
