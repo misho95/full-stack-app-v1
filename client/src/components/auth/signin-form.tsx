@@ -6,10 +6,10 @@ import AuthSeparator from "./auth-separator";
 import AuthButton from "./auth-button";
 import { IoLogoFacebook } from "react-icons/io";
 import { AxiosInstance } from "../../utils/axios";
-import { AuthProivder } from "../../app";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { AuthProivder } from "../../auth-provider";
 
 const schema = yup
   .object({
@@ -28,7 +28,7 @@ const SignInForm = () => {
     resolver: yupResolver(schema),
   });
 
-  const { setLoading } = useContext(AuthProivder);
+  const { setLoading, setToken } = useContext(AuthProivder);
 
   const navigate = useNavigate();
 
@@ -39,15 +39,14 @@ const SignInForm = () => {
     password: string;
   }) => {
     await AxiosInstance.post("http://localhost:8080/api/auth/signin", {
-      username: data.credentials,
+      credential: data.credentials,
       password: data.password,
     })
       .then((res) => {
         const { access_token } = res.data;
-        localStorage.setItem("_at", access_token);
-
+        setToken(access_token);
         setLoading(true);
-        navigate(0);
+        navigate("/", { replace: true });
       })
       .catch((err) => {
         switch (err.response.status) {

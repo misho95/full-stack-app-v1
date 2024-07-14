@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from 'src/models/user.schema';
@@ -9,9 +9,22 @@ export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   async findUser(username: string): Promise<User | undefined> {
-    return this.userModel.findOne({
-      $or: [{ username: username }, { email: username }],
-    });
+    return await this.userModel
+      .findOne({
+        $or: [{ username: username }, { email: username }],
+      })
+      .lean();
+  }
+
+  async getUserProfile(_id: string, username: string) {
+    return await this.userModel
+      .findOne({
+        _id,
+        username,
+      })
+      .select('-password')
+      .lean()
+      .exec();
   }
 
   async createUser(

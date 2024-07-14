@@ -10,30 +10,34 @@ export const AxiosInstance = axios.create({
   withCredentials: true,
 });
 
-AxiosInstance.interceptors.response.use(
-  (config) => {
-    return config;
-  },
-  async (error) => {
-    if (error.response && error.response.status === 401) {
-      const originalRequest = error.response.config;
-      const tkn = localStorage.getItem("_at");
+// export const AxiosInstancePrivate = axios.create({
+//   baseURL: baseUrl,
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+//   withCredentials: true,
+// });
 
-      if (tkn) {
-        const waitToken = await AxiosInstance.post("/auth/refresh_token");
-        const { access_token } = waitToken.data;
+// AxiosInstancePrivate.interceptors.response.use(
+//   (config) => {
+//     return config;
+//   },
+//   async (error) => {
+//     if (error.response && error.response.status === 401) {
+//       const originalRequest = error.response.config;
 
-        if (!originalRequest._retry && access_token) {
-          originalRequest._retry = true;
+//       const waitToken = await AxiosInstance.post("/auth/refresh_token");
+//       const { access_token } = waitToken.data;
 
-          // Modify the original request (e.g., refreshing the token)
-          originalRequest.headers["Authorization"] = `Bearer ${access_token}`;
-          localStorage.setItem("_at", access_token);
-          // Return the modified request
-          return AxiosInstance(originalRequest);
-        }
-      }
-    }
-    return Promise.reject(error);
-  }
-);
+//       if (!originalRequest._retry && access_token) {
+//         originalRequest._retry = true;
+
+//         // Modify the original request (e.g., refreshing the token)
+//         originalRequest.headers["Authorization"] = `Bearer ${access_token}`;
+
+//         return AxiosInstance(originalRequest);
+//       }
+//     }
+//     return Promise.reject(error);
+//   }
+// );

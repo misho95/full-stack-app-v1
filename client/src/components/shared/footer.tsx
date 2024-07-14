@@ -4,7 +4,7 @@ import ThemeSwitch from "./theme-switch";
 const Footer = () => {
   return (
     <footer className="flex flex-col gap-3 justify-center items-center text-xs text-secondary">
-      <nav className="flex gap-3 ">
+      <nav className="flex flex-wrap justify-center items-center gap-3 ">
         <Link to="/">Meta</Link>
         <Link to="/">About</Link>
         <Link to="/">Blog</Link>

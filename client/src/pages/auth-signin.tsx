@@ -10,7 +10,7 @@ const AuthSignInPage = () => {
           alt="phone"
           width={1280}
           height={1280}
-          className="w-[400px] rounded-full hover:rotate-[360deg] duration-500"
+          className="w-[400px] rounded-full hover:rotate-[360deg] duration-500 hidden sm:block"
         />
 
         <SignInForm />
