@@ -9,6 +9,7 @@ interface ButtonProps extends NavLinkProps {
   Icon: IconType;
   IconActive: IconType;
   navigate: boolean;
+  logo?: boolean;
 }
 
 const NavButton = ({
@@ -17,6 +18,7 @@ const NavButton = ({
   Icon,
   IconActive,
   navigate,
+  logo = false,
   ...props
 }: ButtonProps) => {
   const handleClick = (
@@ -38,7 +40,7 @@ const NavButton = ({
       {...props}
       onClick={handleClick}
       className={clsx(
-        "p-3 w-full flex gap-3 items-center hover:bg-slate200 group rounded-md",
+        "p-3 w-full flex gap-3 items-center hover:bg-slate200 group rounded-md text-sm md:text-base",
         {
           "justify-center": navActive,
         }
@@ -54,7 +56,7 @@ const NavButton = ({
             )
           ) : (
             <>
-              {isActive && !navActive ? (
+              {isActive && !navActive && !logo ? (
                 <CustomIcon Icon={IconActive} />
               ) : (
                 <CustomIcon Icon={Icon} />
@@ -96,7 +98,9 @@ const NavButton = ({
 };
 
 const CustomIcon = ({ Icon }: { Icon: IconType }) => {
-  return <Icon className="size-[25px] group-hover:scale-110 duration-150 " />;
+  return (
+    <Icon className="size-[20px] md:size-[25px] group-hover:scale-110 duration-150 " />
+  );
 };
 
 export default NavButton;

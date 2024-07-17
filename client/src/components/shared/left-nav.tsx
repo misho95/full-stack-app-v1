@@ -1,6 +1,6 @@
 import AuthButton from "../auth/auth-button";
 import { useContext, useLayoutEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthProivder } from "../../auth-provider";
 import { AxiosInstance } from "../../utils/axios";
 import clsx from "clsx";
@@ -9,6 +9,8 @@ import { useClickAway } from "@uidotdev/usehooks";
 import { NavigationData } from "../nav/navigation-data";
 import { HiOutlinePlusCircle, HiPlusCircle } from "react-icons/hi";
 import { RiMessage2Fill, RiMessage2Line } from "react-icons/ri";
+import { IoLogoInstagram } from "react-icons/io";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/react-avatar";
 
 const LeftNavigation = () => {
   const { setUser, setLoading, setToken } = useContext(AuthProivder);
@@ -56,6 +58,23 @@ const LeftNavigation = () => {
         )}
       >
         <div className="flex flex-col gap-3">
+          <Link
+            onClick={() => setNavActive(null)}
+            to="/"
+            className={clsx(
+              "p-3 w-full flex gap-3 items-center  group rounded-md text-xl font-bold",
+              {
+                "m-2 ": !navActive,
+                "justify-center hover:bg-slate200": navActive,
+              }
+            )}
+          >
+            {navActive ? (
+              <IoLogoInstagram className="size-[25px] group-hover:scale-110 duration-150" />
+            ) : (
+              "Social-Media-App"
+            )}
+          </Link>
           {NavigationData.slice(0, 4).map((nav) => {
             return (
               <NavButton
@@ -81,6 +100,7 @@ const LeftNavigation = () => {
             IconActive={RiMessage2Fill}
             navigate={false}
             onClick={() => {
+              setNavActive("messages");
               navigate("/messages");
             }}
             to="/message"
@@ -114,13 +134,41 @@ const LeftNavigation = () => {
             }}
             to="/create"
           />
+          <Link
+            onClick={() => setNavActive(null)}
+            to="/profile"
+            className={clsx(
+              "p-3 w-full flex gap-3 items-center hover:bg-slate200 group rounded-md text-sm md:text-base"
+            )}
+          >
+            {navActive ? (
+              <Avatar className="size-[20px] md:size-[25px] group-hover:scale-110 duration-150 ">
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+            ) : (
+              <>
+                <Avatar className="size-[20px] md:size-[25px] group-hover:scale-110 duration-150 ">
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+                <span
+                  className={clsx("capitalize", {
+                    "font-bold": navActive,
+                  })}
+                >
+                  profile
+                </span>
+              </>
+            )}
+          </Link>
         </div>
         <div>
           <AuthButton title="logout" onClick={handleLogOut} />
         </div>
       </nav>
       {navActive && (
-        <div className="absolute bg-slate50 z-40 left-[80px] top-0 h-full w-[120%] p-5 rounded-lg shadow-[6px_0px_10px] shadow-slate300">
+        <div className="absolute bg-slate50 z-40 left-[80px] top-0 h-full w-[400px] p-5 rounded-lg shadow-[6px_0px_10px] shadow-slate300">
           {navActive}
         </div>
       )}

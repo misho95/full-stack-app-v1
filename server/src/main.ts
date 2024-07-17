@@ -25,7 +25,7 @@ async function bootstrap() {
       saveUninitialized: false,
       name: 'session-cookie',
       cookie: {
-        maxAge: 360000,
+        maxAge: 2 * 24 * 60 * 60, // = 2 days. Default
         httpOnly: true,
         secure: false, // should be true in production with HTTPS
       },

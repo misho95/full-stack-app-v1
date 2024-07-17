@@ -128,6 +128,10 @@ const App = () => {
               path: "/messages",
               element: <HomeIndex />,
             },
+            {
+              path: "/profile",
+              element: <HomeIndex />,
+            },
           ],
         }
       : {
